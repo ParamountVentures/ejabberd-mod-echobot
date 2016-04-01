@@ -79,22 +79,22 @@ code_change(_OldVsn, Host, _Extra) ->
 % protection here to prevent malicious users
 %route(From, #jid{luser = ?BOTNAME} = To, {xmlelement, "presence", _, _} = Packet) ->
 route(From, To, {xmlel, <<"presence">>, _, _} = Packet) ->
-  case xml:get_tag_attr_s("type", Packet) of
-    "subscribe" ->
+  case xml:get_tag_attr_s(<<"type">>, Packet) of
+    <<"subscribe">> ->
       send_presence(To, From, "subscribe");
-    "subscribed" ->
+    <<"subscribed">> ->
       send_presence(To, From, "subscribed"),
       send_presence(To, From, "");
-    "unsubscribe" ->
+    <<"unsubscribe">> ->
       send_presence(To, From, "unsubscribed"),
       send_presence(To, From, "unsubscribe");
-    "unsubscribed" ->
+    <<"unsubscribed">> ->
       send_presence(To, From, "unsubscribed");
-    "" ->
+    <<"">> ->
       send_presence(To, From, "");
-    "unavailable" ->
+    <<"unavailable">> ->
       ok;
-    "probe" ->
+    <<"probe">> ->
       send_presence(To, From, "");
     _Other ->
       error_logger:info_msg("Other kind of presence~n~p", [Packet])
